@@ -1,0 +1,101 @@
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+			<input v-model="filter">
+            <ul>
+				<li v-for="(shelf, shelfIndex) in filteredShelves">
+					{{ shelf.name }}
+					<button v-on:click="addItem(shelfIndex)">Add</button>
+					<ul>
+					  <li v-for="(product, productIndex) in shelf.products">
+						<button v-on:click="checkItem(product)"><span v-if="!product.checked">o</span><span v-if="product.checked">.</span></button>
+						{{ product.name }}
+						<button v-on:click="removeItem(shelf, productIndex)">X</button>
+					  </li>
+					</ul>
+				</li>
+			</ul>
+        </div>
+
+        <script>
+		var shelves = [
+			{
+				name: 'legumes',
+				products: [
+					{ name: 'tomates', checked: false }
+				]
+			},
+			{
+				name: 'charcuterie',
+				products: [
+					{ name: 'jambon', checked: false }
+				]
+			},
+			{
+				name: 'autre',
+				products: [
+					{ name: 'PQ', checked: false }
+				]
+			}
+		];
+
+		// localStorage persistence
+		var STORAGE_KEY = '5643789HHFGT6';
+		var shelvesStorage = {
+		  fetch: function () {
+			return JSON.parse(localStorage.getItem(STORAGE_KEY) || JSON.stringify(shelves));
+		  },
+		  save: function (shelves) {
+			localStorage.setItem(STORAGE_KEY, JSON.stringify(shelves))
+		  }
+		}
+
+		var app = new Vue({
+			el: '#app',
+			data: {
+				filter: '',
+				shelves: shelvesStorage.fetch()
+			},
+			computed: {
+				filteredShelves: function(){
+					var filter = this.filter;
+					var shelves = this.shelves;
+					return shelves;
+					//return this.list.filter(function(item){
+					//	return item.name.toLowerCase().indexOf(filter.toLowerCase()) > -1;
+					//}).sort(function (a, b){
+					//	if(a.name < b.name) return -1;
+					//	if(a.name > b.name) return 1;
+					//	return 0;
+					//}).sort(function (a, b){
+					//	return (a.checked === b.checked) ? 0 : a.checked ? 1 : -1;
+					//});
+				}
+			},
+			methods: {
+				addItem: function (shelfIndex){
+					this.shelves[shelfIndex].products.push({ name :this.filter, checked: false });
+					this.filter = '';
+				},
+				checkItem: function (item){
+					item.checked = !item.checked;
+				},
+				removeItem: function (shelf, productIndex){
+					shelf.products.splice(productIndex, 1);
+				}
+			},
+			watch: {
+				shelves: {
+					handler: function (shelves) {
+						shelvesStorage.save(shelves)
+					},
+					deep: true
+				}
+			},
+		});
+		</script>
+    </body>
+</html>
