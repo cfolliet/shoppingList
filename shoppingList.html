@@ -12,7 +12,7 @@
                     <i class="fas fa-plus-circle" v-if="filter" v-on:click="addItem(shelfIndex)"></i>
 					<ul>
 					  <li v-for="(product, productIndex) in shelf.products" v-if="product.name.toLowerCase().indexOf(filter.toLowerCase()) > -1">
-						<i v-on:click="checkItem(product)" class="far fa-square" v-if="!product.checked"></i>
+						<i v-on:click="checkItem(product)" class="far" v-bind:class="product.checked ? 'fa-check-square': 'fa-square'"></i>
 						{{ product.name }}
                         <i class="far fa-trash-alt" v-on:click="removeItem(shelf, productIndex)"></i>
 					  </li>
@@ -66,6 +66,7 @@
 					this.filter = '';
 				},
 				checkItem: function (item){
+                    console.log('titit')
 					item.checked = !item.checked;
 				},
 				removeItem: function (shelf, productIndex){
