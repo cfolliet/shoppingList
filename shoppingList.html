@@ -1,6 +1,7 @@
 <html>
     <head>
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     </head>
     <body>
         <div id="app">
@@ -8,12 +9,12 @@
             <ul>
 				<li v-for="(shelf, shelfIndex) in shelves">
 					{{ shelf.name }}
-					<button v-on:click="addItem(shelfIndex)">Add</button>
+                    <i class="fas fa-plus-circle" v-if="filter" v-on:click="addItem(shelfIndex)"></i>
 					<ul>
 					  <li v-for="(product, productIndex) in shelf.products" v-if="product.name.toLowerCase().indexOf(filter.toLowerCase()) > -1">
-						<button v-on:click="checkItem(product)"><span v-if="!product.checked">o</span><span v-if="product.checked">.</span></button>
+						<i v-on:click="checkItem(product)" class="far fa-square" v-if="!product.checked"></i>
 						{{ product.name }}
-						<button v-on:click="removeItem(shelf, productIndex)">X</button>
+                        <i class="far fa-trash-alt" v-on:click="removeItem(shelf, productIndex)"></i>
 					  </li>
 					</ul>
 				</li>
