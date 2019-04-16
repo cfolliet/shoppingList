@@ -3,16 +3,40 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+        <style type="text/css">
+            #app {
+                font-size: 20px;
+                line-height: 38px;
+            }
+
+            .shelve {
+                color: red;
+            }
+
+            .product {
+                color: blue;
+                width: 100%;
+            }
+
+            .checked {
+                color: green;
+            }
+
+            .wrapper {
+                margin: 0 auto;
+                width: 90%;
+            }
+        </style>
     </head>
     <body>
-        <div id="app">
+        <div id="app" class="wrapper">
 			<input v-model="filter">
             <ul>
-				<li v-for="(shelf, shelfIndex) in shelves">
+				<li class="shelve" v-for="(shelf, shelfIndex) in shelves">
 					{{ shelf.name }}
                     <i class="fas fa-plus-circle" v-if="filter" v-on:click="addItem(shelfIndex)"></i>
 					<ul>
-					  <li v-for="(product, productIndex) in shelf.products" v-if="product.name.toLowerCase().indexOf(filter.toLowerCase()) > -1">
+					  <li class="product" v-for="(product, productIndex) in shelf.products" v-if="product.name.toLowerCase().indexOf(filter.toLowerCase()) > -1" v-bind:class="product.checked ? 'checked': ''">
 						<i v-on:click="checkItem(product)" class="far" v-bind:class="product.checked ? 'fa-check-square': 'fa-square'"></i>
 						{{ product.name }}
                         <i class="far fa-trash-alt" v-on:click="removeItem(shelf, productIndex)"></i>
