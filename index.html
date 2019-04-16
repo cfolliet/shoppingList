@@ -3,14 +3,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
         <style type="text/css">
-            #app {
-                font-size: 20px;
+            body {
+                background-color: #eeeeee;
                 line-height: 38px;
+                font-family: 'Roboto', sans-serif;
             }
 
             #filter {
-                width: 100%
+                width: 100%;
+                height: 30px;
             }
 
             ul {
@@ -19,17 +22,19 @@
             }
 
             .shelve {
-                color: red;
-                text-transform: capitalize;
+                color: #4a5a6a;
+                text-transform: uppercase;
+                font-size: 10px;
             }
 
             .products {
+                font-size: 20px;
                 padding-left:20px;
             }
 
             .product {
                 display: flex;
-                color: blue;
+                color: #1a2a3a;
                 width: 100%;
                 text-transform: capitalize;
                 text-align: left;
@@ -41,6 +46,7 @@
 
             .product .trash {
                 flex: 0;
+                color: #cccccc
             }
 
             .product span {
@@ -49,7 +55,12 @@
             }
 
             .checked {
-                color: green;
+                color: #aaaaaa;
+                font-style: italic;
+            }
+
+            .checked.product span {
+                text-decoration: line-through;
             }
 
             .wrapper {
