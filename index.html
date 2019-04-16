@@ -11,9 +11,18 @@
                 font-family: 'Roboto', sans-serif;
             }
 
+            #bar {
+                display: flex;
+            }
+
             #filter {
                 width: 100%;
                 height: 30px;
+            }
+
+            #bar i {
+                margin-top: 7px;
+                margin-left: 20PX;
             }
 
             ul {
@@ -72,13 +81,16 @@
     </head>
     <body>
         <div id="app" class="wrapper">
-			<input id="filter" v-bind:value="filter" v-on:input="filter=$event.target.value">
+            <div id="bar">
+                <input id="filter" v-bind:value="filter" v-on:input="filter=$event.target.value">
+                <i v-on:click="toggleDisplayChecked()" class="far" v-bind:class="displayChecked ? 'fa-eye': 'fa-eye-slash'"></i>
+            </div>
             <ul>
 				<li class="shelve" v-for="(shelf, shelfIndex) in shelves">
 					{{ shelf.name }}
                     <i class="fas fa-plus-circle" v-if="filter" v-on:click="addItem(shelfIndex)"></i>
 					<ul class="products">
-					  <li class="product" v-for="(product, productIndex) in shelf.products" v-if="product.name.toLowerCase().indexOf(filter.toLowerCase()) > -1" v-bind:class="product.checked ? 'checked': ''">
+					  <li class="product" v-for="(product, productIndex) in shelf.products" v-if="product.name.toLowerCase().indexOf(filter.toLowerCase()) > -1 && (!product.checked || displayChecked)" v-bind:class="product.checked ? 'checked': ''">
 						<i v-on:click="checkItem(product)" class="far" v-bind:class="product.checked ? 'fa-check-square': 'fa-square'"></i>
 						<span>{{ product.name }}</span>
                         <i class="trash far fa-trash-alt" v-on:click="removeItem(shelf, productIndex)"></i>
@@ -93,25 +105,31 @@
 			{
 				name: 'legumes',
 				products: [
-					{ name: 'tomates', checked: false }
+					{ name: 'tomates', checked: false },
+                    { name: 'salade', checked: false },
+                    { name: 'oignons', checked: false }
 				]
 			},
 			{
-				name: 'charcuterie',
+				name: 'charcuterie - fromagerie',
 				products: [
-					{ name: 'jambon', checked: false }
+					{ name: 'jambon', checked: false },
+                    { name: 'chevre', checked: false },
+                    { name: 'comté', checked: false }
 				]
 			},
 			{
 				name: 'autre',
 				products: [
-					{ name: 'PQ', checked: false }
+					{ name: 'PQ', checked: false },
+                    { name: 'lessive', checked: false },
+                    { name: 'arbre vert multiusage', checked: false }
 				]
 			}
 		];
 
 		// localStorage persistence
-		var STORAGE_KEY = '5643789HHFGT6';
+		var STORAGE_KEY = '56437896HHFGT6';
 		var shelvesStorage = {
 		  fetch: function () {
 			return JSON.parse(localStorage.getItem(STORAGE_KEY) || JSON.stringify(shelves));
@@ -125,6 +143,7 @@
 			el: '#app',
 			data: {
 				filter: '',
+                displayChecked: false,
 				shelves: shelvesStorage.fetch()
 			},
 			methods: {
@@ -133,9 +152,11 @@
 					this.filter = '';
 				},
 				checkItem: function (item){
-                    console.log('titit')
 					item.checked = !item.checked;
 				},
+                toggleDisplayChecked: function () {
+                    this.displayChecked = !this.displayChecked;
+                },
 				removeItem: function (shelf, productIndex){
 					shelf.products.splice(productIndex, 1);
 				}
