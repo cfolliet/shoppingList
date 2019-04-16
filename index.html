@@ -30,7 +30,7 @@
     </head>
     <body>
         <div id="app" class="wrapper">
-			<input v-model="filter">
+			<input v-bind:value="filter" v-on:input="filter= $event.target.value">
             <ul>
 				<li class="shelve" v-for="(shelf, shelfIndex) in shelves">
 					{{ shelf.name }}
