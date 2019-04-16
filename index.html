@@ -9,13 +9,43 @@
                 line-height: 38px;
             }
 
+            #filter {
+                width: 100%
+            }
+
+            ul {
+                padding: 0px;
+                list-style-type: none;
+            }
+
             .shelve {
                 color: red;
+                text-transform: capitalize;
+            }
+
+            .products {
+                padding-left:20px;
             }
 
             .product {
+                display: flex;
                 color: blue;
                 width: 100%;
+                text-transform: capitalize;
+                text-align: left;
+            }
+
+            .product i {
+                margin-top: 10px;
+            }
+
+            .product .trash {
+                flex: 0;
+            }
+
+            .product span {
+                flex: 1;
+                margin-left: 10px;
             }
 
             .checked {
@@ -24,22 +54,23 @@
 
             .wrapper {
                 margin: 0 auto;
+                margin-top: 30px;
                 width: 90%;
             }
         </style>
     </head>
     <body>
         <div id="app" class="wrapper">
-			<input v-bind:value="filter" v-on:input="filter=$event.target.value">
+			<input id="filter" v-bind:value="filter" v-on:input="filter=$event.target.value">
             <ul>
 				<li class="shelve" v-for="(shelf, shelfIndex) in shelves">
 					{{ shelf.name }}
                     <i class="fas fa-plus-circle" v-if="filter" v-on:click="addItem(shelfIndex)"></i>
-					<ul>
+					<ul class="products">
 					  <li class="product" v-for="(product, productIndex) in shelf.products" v-if="product.name.toLowerCase().indexOf(filter.toLowerCase()) > -1" v-bind:class="product.checked ? 'checked': ''">
 						<i v-on:click="checkItem(product)" class="far" v-bind:class="product.checked ? 'fa-check-square': 'fa-square'"></i>
-						{{ product.name }}
-                        <i class="far fa-trash-alt" v-on:click="removeItem(shelf, productIndex)"></i>
+						<span>{{ product.name }}</span>
+                        <i class="trash far fa-trash-alt" v-on:click="removeItem(shelf, productIndex)"></i>
 					  </li>
 					</ul>
 				</li>
