@@ -66,6 +66,11 @@
             .checked {
                 color: #aaaaaa;
                 font-style: italic;
+                display: none;
+            }
+
+            .displayAlways{
+                display: flex;
             }
 
             .checked.product span {
@@ -90,7 +95,7 @@
 					{{ shelf.name }}
                     <i class="fas fa-plus-circle" v-if="filter" v-on:click="addItem(shelfIndex)"></i>
 					<ul class="products">
-					  <li class="product" v-for="(product, productIndex) in shelf.products" v-if="product.name.toLowerCase().indexOf(filter.toLowerCase()) > -1 && (!product.checked || displayChecked)" v-bind:class="product.checked ? 'checked': ''">
+					  <li class="product" v-for="(product, productIndex) in shelf.products" v-if="product.name.toLowerCase().indexOf(filter.toLowerCase()) > -1" v-bind:class="[product.checked ? 'checked': '', displayChecked ? 'displayAlways': '']">
 						<i v-on:click="checkItem(product)" class="far" v-bind:class="product.checked ? 'fa-check-square': 'fa-square'"></i>
 						<span>{{ product.name }}</span>
                         <i class="trash far fa-trash-alt" v-on:click="removeItem(shelf, productIndex)"></i>
