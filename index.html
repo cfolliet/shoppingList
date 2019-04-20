@@ -129,7 +129,9 @@
             var docRef = db.collection(listName).doc(docName);
             docRef.onSnapshot(function(doc) {
                 if (doc.exists) {
-                    app.shelves = JSON.parse(doc.data().value);
+                    if(doc.data().value != JSON.stringify(app.shelves)){
+                        app.shelves = JSON.parse(doc.data().value);
+                    }
                 } else {
                     // doc.data() will be undefined in this case
                     console.log("No such document!");
