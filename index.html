@@ -35,10 +35,18 @@
                 list-style-type: none;
             }
 
-            .shelve {
+            .shelf {
                 color: #4a5a6a;
                 text-transform: uppercase;
                 font-size: 10px;
+            }
+
+            .shelf .fa-plus-circle {
+                margin-right: 10px;
+            }
+
+            .shelf .trash {
+                color: #aaaaaa;
             }
 
             .products {
@@ -68,6 +76,10 @@
                 margin-left: 10px;
             }
 
+            .product .fa-plus-circle {
+                margin-right: 10px;
+            }
+
             .checked {
                 color: #aaaaaa;
                 font-style: italic;
@@ -92,21 +104,27 @@
     <body>
         <div id="app" class="wrapper">
             <div id="bar">
-                <input id="filter" v-bind:value="filter" v-on:input="filter=$event.target.value">
+                <input id="filter" v-bind:value="filter" v-on:input="filter=$event.target.value" placeholder="Search or Add...">
                 <i v-on:click="toggleDisplayChecked()" class="far" v-bind:class="displayChecked ? 'fa-eye': 'fa-eye-slash'"></i>
             </div>
             <ul>
-				<li class="shelve" v-for="(shelf, shelfIndex) in shelves">
+				<li class="shelf" v-for="(shelf, shelfIndex) in shelves">
 					{{ shelf.name }}
-                    <i class="fas fa-plus-circle" v-if="filter" v-on:click="addItem(shelfIndex)"></i>
-					<ul class="products">
-					  <li class="product" v-for="(product, productIndex) in shelf.products" v-if="product.name.toLowerCase().indexOf(filter.toLowerCase()) > -1" v-bind:class="[product.checked ? 'checked': '', displayChecked ? 'displayAlways': '']">
+                    &nbsp;<i class="trash far fa-trash-alt" v-on:click="removeShelf(shelfIndex)"></i>
+                    <ul class="products">
+					  <li class="product" v-for="(product, productIndex) in shelf.products" v-if="product.name.toLowerCase().indexOf(filter.toLowerCase()) > -1" v-bind:class="[product.checked ? 'checked': '', displayChecked || filter ? 'displayAlways': '']">
 						<i v-on:click="checkItem(product)" class="far" v-bind:class="product.checked ? 'fa-check-square': 'fa-square'"></i>
 						<span>{{ product.name }}</span>
                         <i class="trash far fa-trash-alt" v-on:click="removeItem(shelf, productIndex)"></i>
 					  </li>
+                      <li class="product" v-if="filter" v-on:click="addItem(shelfIndex)">
+                          <i class="fas fa-plus-circle"></i>Add {{ filter }}
+                      </li>
 					</ul>
 				</li>
+                <li class="shelf" v-if="filter" v-on:click="addShelf()">
+                    <i class="fas fa-plus-circle"></i>Add {{ filter }}
+                </li>
 			</ul>
         </div>
 
@@ -174,6 +192,13 @@
                 },
 				removeItem: function (shelf, productIndex){
 					shelf.products.splice(productIndex, 1);
+				},
+				addShelf: function (shelfIndex){
+					this.shelves.push({ name :this.filter, products: [] });
+					this.filter = '';
+				},
+				removeShelf: function (shelfIndex){
+					this.shelves.splice(shelfIndex, 1);
 				}
 			},
 			watch: {
