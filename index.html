@@ -16,21 +16,29 @@
                 font-family: 'Roboto', sans-serif;
             }
 
-            #bar {
+            #head input {
+                height: 30px;
+                border-radius: 5px;
+                border: #aaaaaa solid 1px;
+                padding: 10px;
+                margin: 5px;
+            }
+
+            #head i {
+                margin-top: 12px;
+                margin-left: 20PX;
+            }
+
+            #head-top {
+                display: flex;
+            }
+
+            #settings {
                 display: flex;
             }
 
             #filter {
                 width: 100%;
-                height: 30px;
-                border-radius: 5px;
-                border: #aaaaaa solid 1px;
-                padding: 10px;
-            }
-
-            #bar i {
-                margin-top: 7px;
-                margin-left: 20PX;
             }
 
             ul {
@@ -110,9 +118,16 @@
     </head>
     <body>
         <div id="app" class="wrapper">
-            <div id="bar">
-                <input id="filter" v-bind:value="filter" v-on:input="filter=$event.target.value" placeholder="Search or Add...">
-                <i v-on:click="toggleDisplayChecked()" class="far" v-bind:class="displayChecked ? 'fa-eye': 'fa-eye-slash'"></i>
+            <div id="head">
+                <div id="head-top">
+                    <input id="filter" v-bind:value="filter" v-on:input="filter=$event.target.value" placeholder="Search or Add...">
+                    <i v-on:click="toggleDisplayChecked()" class="far" v-bind:class="displayChecked ? 'fa-eye': 'fa-eye-slash'"></i>
+                    <i v-on:click="displaySettings = !displaySettings" class="fas fa-cog"></i>
+                </div>
+                <div id="settings" v-if="displaySettings">
+                    Client Id: <input id="clienttId" v-model="clientId" placeholder="Client Id...">
+                    <i v-on:click="saveClientId(clientId)" class="fas fa-save"></i>
+                </div>
             </div>
             <ul>
 				<li class="shelf" v-for="(shelf, shelfIndex) in shelves">
@@ -148,10 +163,9 @@
         firebase.initializeApp(config);
         var db = firebase.firestore();
         var listName = 'lists';
-        var docName = 'artraxus'
 
         function getList() {
-            var docRef = db.collection(listName).doc(docName);
+            var docRef = db.collection(listName).doc(app.clientId);
             docRef.onSnapshot(function(doc) {
                 if (doc.exists) {
                     if(doc.data().value != JSON.stringify(app.shelves)){
@@ -164,11 +178,9 @@
             });
         };
 
-        getList();
-
         function setList(shelves){
             // Add a new document in collection
-            db.collection(listName).doc(docName).set({
+            db.collection(listName).doc(app.clientId).set({
                 value: JSON.stringify(shelves)
             })
             .then(function() {
@@ -184,7 +196,9 @@
 			data: {
 				filter: '',
                 displayChecked: false,
-				shelves: []
+                displaySettings: false,
+				shelves: [],
+                clientId: localStorage.getItem('clientId') || 'test'
 			},
 			methods: {
 				addItem: function (shelfIndex){
@@ -206,7 +220,11 @@
 				},
 				removeShelf: function (shelfIndex){
 					this.shelves.splice(shelfIndex, 1);
-				}
+				},
+                saveClientId: function (clientId){
+                    localStorage.setItem('clientId', clientId);
+                    getList();
+                }
 			},
 			watch: {
 				shelves: {
@@ -217,6 +235,9 @@
 				}
 			},
 		});
+
+        getList();
+
 		</script>
     </body>
 </html>
