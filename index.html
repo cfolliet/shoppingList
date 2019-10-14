@@ -125,6 +125,7 @@
             <div id="head">
                 <div id="head-top">
                     <input id="filter" v-bind:value="filter" v-on:input="filter=$event.target.value" placeholder="Search or Add...">
+                    <i v-on:click="filter = ''" class="fas fa-times"></i>
                     <i v-on:click="toggleDisplayChecked()" class="far" v-bind:class="displayChecked ? 'fa-eye': 'fa-eye-slash'"></i>
                     <i v-on:click="displaySettings = !displaySettings" class="fas fa-cog"></i>
                 </div>
